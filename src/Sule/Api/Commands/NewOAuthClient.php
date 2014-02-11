@@ -17,7 +17,7 @@ class NewOAuthClient extends Command
 	 *
 	 * @var string
 	 */
-	protected $name = 'kotakin:newOAuthClient';
+	protected $name = 'api:newOAuthClient';
 
 	/**
 	 * The console command description.
