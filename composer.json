@@ -1,0 +1,20 @@
+{
+    "name": "sule/api",
+    "description": "Helper to create APIs in Laravel.",
+    "authors": [
+        {
+            "name": "Sulaeman",
+            "email": "me@sulaeman.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.7",
+        "lucadegasperi/oauth2-server-laravel": "1.0.x"
+    },
+    "autoload": {
+        "psr-0": {
+            "Sule\\Api": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
