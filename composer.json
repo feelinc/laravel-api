@@ -13,9 +13,6 @@
         "lucadegasperi/oauth2-server-laravel": "1.0.x"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
         "psr-0": {
             "Sule\\Api": "src/"
         }
