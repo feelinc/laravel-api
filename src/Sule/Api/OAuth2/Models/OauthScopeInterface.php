@@ -1,5 +1,5 @@
 <?php
-namespace Sule\Api\Models;
+namespace Sule\Api\OAuth2\Models;
 
 /*
  * Author: Sulaeman <me@sulaeman.com>.
@@ -8,25 +8,25 @@ namespace Sule\Api\Models;
  * file that was distributed with this source code.
  */
 
-interface OauthClientInterface
+interface OauthScopeInterface
 {
 
     /**
-     * Returns the OAuth client's table name.
+     * Returns the OAuth scope's table name.
      *
      * @return string
      */
     public function getTable();
 
     /**
-     * Returns the OAuth client's ID.
+     * Returns the OAuth scope's ID.
      *
      * @return mixed
      */
     public function getId();
 
     /**
-     * Saves the OAuth client.
+     * Saves the OAuth scope.
      *
      * @param  array  $options
      * @return bool
@@ -34,7 +34,7 @@ interface OauthClientInterface
     public function save(array $options = array());
 
     /**
-     * Delete the OAuth client.
+     * Delete the OAuth scope.
      *
      * @return bool
      */

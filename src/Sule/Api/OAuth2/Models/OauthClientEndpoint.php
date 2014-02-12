@@ -1,5 +1,5 @@
 <?php
-namespace Sule\Api\Models;
+namespace Sule\Api\OAuth2\Models;
 
 /*
  * Author: Sulaeman <me@sulaeman.com>.
@@ -10,9 +10,9 @@ namespace Sule\Api\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Sule\Api\Models\OauthClientInterface;
+use Sule\Api\OAuth2\Models\OauthClientEndpointInterface;
 
-class OauthClient extends Model implements OauthClientInterface
+class OauthClientEndpoint extends Model implements OauthClientEndpointInterface
 {
 
 	/**
@@ -20,7 +20,7 @@ class OauthClient extends Model implements OauthClientInterface
 	 *
 	 * @var string
 	 */
-	protected $table = 'oauth_clients';
+	protected $table = 'oauth_client_endpoints';
 
 	/**
      * The attributes that aren't mass assignable.
@@ -30,7 +30,7 @@ class OauthClient extends Model implements OauthClientInterface
     protected $guarded = array();
 
     /**
-     * Returns the OAuth client's table name.
+     * Returns the OAuth client endpoint's table name.
      *
      * @return string
      */
@@ -40,7 +40,7 @@ class OauthClient extends Model implements OauthClientInterface
     }
 
     /**
-     * Returns the OAuth client's ID.
+     * Returns the OAuth client endpoint's ID.
      *
      * @return mixed
      */
@@ -50,7 +50,7 @@ class OauthClient extends Model implements OauthClientInterface
     }
 
     /**
-     * Saves the OAuth client.
+     * Saves the OAuth client endpoint.
      *
      * @param  array  $options
      * @return bool
@@ -61,7 +61,7 @@ class OauthClient extends Model implements OauthClientInterface
     }
 
     /**
-     * Delete the OAuth client.
+     * Delete the OAuth client endpoint.
      *
      * @return bool
      */

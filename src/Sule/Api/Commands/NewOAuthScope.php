@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-use Sule\Api\OAuth2\Models\OauthClient;
+use Sule\Api\OAuth2\Models\OauthScope;
 
-class NewOAuthClient extends Command
+class NewOAuthScope extends Command
 {
 
 	/**
@@ -17,14 +17,14 @@ class NewOAuthClient extends Command
 	 *
 	 * @var string
 	 */
-	protected $name = 'api:newOAuthClient';
+	protected $name = 'api:newOAuthScope';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Create a new OAuth client.';
+	protected $description = 'Create a new OAuth scope.';
 
 	/**
 	 * Create a new command instance.
@@ -43,31 +43,25 @@ class NewOAuthClient extends Command
 	 */
 	public function fire()
 	{
-		$clientName   = $this->argument('name');
-		$clientId     = $this->option('id');
-		$clientSecret = $this->option('secret');
+		$scope       = $this->argument('scope');
+		$name        = $this->argument('name');
+		$description = $this->option('description');
 
-		if (empty($clientId)) {
-			$clientId = Str::random(40);
+        if (empty($name)) {
+			$name = $scope;
 		}
 
-		if (empty($clientSecret)) {
-			$clientSecret = Str::random(40);
-		}
-
-		$oAuthClient = OauthClient::create(array(
-			'id'     => $clientId,
-			'secret' => $clientSecret,
-			'name'   => $clientName
+		$oAuthScope = OauthScope::create(array(
+			'scope'       => $scope,
+			'name'        => $name,
+			'description' => $description
 		));
 
-		if ($oAuthClient->exists) {
-            $this->info('Client Name: '.$clientName);
-			$this->info('Client Id: '.$clientId);
-			$this->info('Client Secret: '.$clientSecret);
+		if ($oAuthScope->exists) {
+            $this->info('Scope: '.$scope);
 			$this->info('Created');
 		} else {
-			$this->error('Client Name: '.$clientName);
+			$this->info('Scope: '.$scope);
 			$this->error('Failed');
 		}
 	}
@@ -81,9 +75,14 @@ class NewOAuthClient extends Command
     {
         return array(
             array(
-                'name', 
+                'scope', 
                 InputArgument::REQUIRED, 
-                'Client Name'
+                'Scope'
+            ),
+            array(
+                'name', 
+                InputArgument::OPTIONAL, 
+                'Scope name'
             )
         );
     }
@@ -97,17 +96,10 @@ class NewOAuthClient extends Command
 	{
 		return array(
             array(
-                'id', 
+                'description', 
                 null, 
                 InputOption::VALUE_OPTIONAL, 
-                'Client Id', 
-                ''
-            ),
-            array(
-                'secret', 
-                null, 
-                InputOption::VALUE_OPTIONAL, 
-                'Client Secret', 
+                'Scope description', 
                 ''
             )
         );
