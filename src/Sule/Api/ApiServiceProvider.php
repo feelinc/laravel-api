@@ -12,9 +12,6 @@ use Illuminate\Support\ServiceProvider;
 
 use Sule\Api\OAuth2\OAuthServer;
 
-use Sule\Api\Commands\NewOAuthClient;
-use Sule\Api\Commands\NewOAuthScope;
-
 class ApiServiceProvider extends ServiceProvider
 {
 
@@ -61,7 +58,7 @@ class ApiServiceProvider extends ServiceProvider
         $this->app->bind('League\OAuth2\Server\Storage\ClientInterface', 'Sule\Api\OAuth2\Repositories\FluentClient');
         $this->app->bind('League\OAuth2\Server\Storage\ScopeInterface', 'Sule\Api\OAuth2\Repositories\FluentScope');
         $this->app->bind('League\OAuth2\Server\Storage\SessionInterface', 'Sule\Api\OAuth2\Repositories\FluentSession');
-        $this->app->bind('LucaDegasperi\OAuth2Server\Repositories\SessionManagementInterface', 'Sule\Api\OAuth2\Repositories\FluentSession');
+        $this->app->bind('Sule\Api\OAuth2\Repositories\SessionManagementInterface', 'Sule\Api\OAuth2\Repositories\FluentSession');
 
         $this->app['api.authorization'] = $this->app->share(function ($app) {
 
@@ -115,22 +112,24 @@ class ApiServiceProvider extends ServiceProvider
     private function registerCommands()
     {
         // Command to create a new OAuth client
-        $this->app['command.api.newOAuthClient'] = $this->app->share(
-            function ($app) {
-                return new NewOAuthClient();
-            }
-        );
+        $this->app['command.api.newOAuthClient'] = $this->app->share(function ($app) {
+            return $app->make('Sule\Api\Commands\NewOAuthClient');
+        });
 
         // Command to create a new OAuth scope
-        $this->app['command.api.newOAuthScope'] = $this->app->share(
-            function ($app) {
-                return new NewOAuthScope();
-            }
-        );
+        $this->app['command.api.newOAuthScope'] = $this->app->share(function ($app) {
+            return $app->make('Sule\Api\Commands\NewOAuthScope');
+        });
+
+        // Command to clean expired OAuth tokens
+        $this->app['command.api.cleanExpiredTokens'] = $this->app->share(function ($app) {
+            return $app->make('Sule\Api\Commands\CleanExpiredTokens');
+        });
 
         $this->commands(
         	'command.api.newOAuthClient', 
-            'command.api.newOAuthScope'
+            'command.api.newOAuthScope', 
+            'command.api.cleanExpiredTokens'
         );
     }
 

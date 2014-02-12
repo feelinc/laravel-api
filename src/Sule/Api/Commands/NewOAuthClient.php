@@ -1,6 +1,13 @@
 <?php
 namespace Sule\Api\Commands;
 
+/*
+ * Author: Sulaeman <me@sulaeman.com>.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
