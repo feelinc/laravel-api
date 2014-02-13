@@ -10,6 +10,8 @@ namespace Sule\Api;
 
 use Illuminate\Support\ServiceProvider;
 
+use Sule\Api\Api;
+use Sule\Api\Facades\Request;
 use Sule\Api\OAuth2\OAuthServer;
 
 class ApiServiceProvider extends ServiceProvider
@@ -31,6 +33,9 @@ class ApiServiceProvider extends ServiceProvider
 	{
 		$this->package('sule/api', 'sule/api');
 
+        // Load the filters
+        include __DIR__.'/../../filters.php';
+
         // Load the routes
         require_once __DIR__.'/../../routes.php';
 	}
@@ -43,6 +48,7 @@ class ApiServiceProvider extends ServiceProvider
 	public function register()
 	{
         $this->registerOAuthServer();
+        $this->registerApi();
 
         // Register artisan commands
 		$this->registerCommands();
@@ -101,6 +107,18 @@ class ApiServiceProvider extends ServiceProvider
 
             return new OAuthServer($server);
 
+        });
+    }
+
+    /**
+     * Register the Api.
+     *
+     * @return void
+     */
+    public function registerApi()
+    {
+        $this->app['api'] = $this->app->share(function ($app) {
+            return new Api(new Request());
         });
     }
 

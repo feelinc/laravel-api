@@ -64,6 +64,10 @@ class FluentClient implements ClientInterface
                         ->select(
                             'oauth_clients.id as id',
                             'oauth_clients.secret as secret',
+                            'oauth_clients.request_limit as request_limit',
+                            'oauth_clients.current_total_request as current_total_request',
+                            'oauth_clients.request_limit_until as request_limit_until',
+                            'oauth_clients.last_request_at as last_request_at',
                             'oauth_client_endpoints.redirect_uri as redirect_uri',
                             'oauth_clients.name as name')
                         ->join('oauth_client_endpoints', 'oauth_clients.id', '=', 'oauth_client_endpoints.client_id')
@@ -74,6 +78,10 @@ class FluentClient implements ClientInterface
                         ->select(
                             'oauth_clients.id as id',
                             'oauth_clients.secret as secret',
+                            'oauth_clients.request_limit as request_limit',
+                            'oauth_clients.current_total_request as current_total_request',
+                            'oauth_clients.request_limit_until as request_limit_until',
+                            'oauth_clients.last_request_at as last_request_at',
                             'oauth_clients.name as name')
                         ->where('oauth_clients.id', $clientId)
                         ->where('oauth_clients.secret', $clientSecret);
@@ -82,6 +90,10 @@ class FluentClient implements ClientInterface
                         ->select(
                             'oauth_clients.id as id',
                             'oauth_clients.secret as secret',
+                            'oauth_clients.request_limit as request_limit',
+                            'oauth_clients.current_total_request as current_total_request',
+                            'oauth_clients.request_limit_until as request_limit_until',
+                            'oauth_clients.last_request_at as last_request_at',
                             'oauth_client_endpoints.redirect_uri as redirect_uri',
                             'oauth_clients.name as name')
                         ->join('oauth_client_endpoints', 'oauth_clients.id', '=', 'oauth_client_endpoints.client_id')
@@ -90,7 +102,7 @@ class FluentClient implements ClientInterface
                         ->where('oauth_client_endpoints.redirect_uri', $redirectUri);
         }
 
-        if (Config::get('lucadegasperi/oauth2-server-laravel::oauth2.limit_clients_to_grants') === true and ! is_null($grantType)) {
+        if (Config::get('sule/api::oauth2.limit_clients_to_grants') === true and ! is_null($grantType)) {
             $query = $query->join('oauth_client_grants', 'oauth_clients.id', '=', 'oauth_client_grants.client_id')
                            ->join('oauth_grants', 'oauth_grants.id', '=', 'oauth_client_grants.grant_id')
                            ->where('oauth_grants.grant', $grantType);
@@ -106,11 +118,15 @@ class FluentClient implements ClientInterface
         $metadata = DB::table('oauth_client_metadata')->where('client_id', '=', $result->id)->lists('value', 'key');
 
         return array(
-            'client_id'     =>  $result->id,
-            'client_secret' =>  $result->secret,
-            'redirect_uri'  =>  (isset($result->redirect_uri)) ? $result->redirect_uri : null,
-            'name'          =>  $result->name,
-            'metadata'      =>  $metadata
+            'client_id'             =>  $result->id,
+            'client_secret'         =>  $result->secret,
+            'request_limit'         =>  $result->request_limit,
+            'current_total_request' =>  $result->current_total_request,
+            'request_limit_until'   =>  $result->request_limit_until,
+            'last_request_at'       =>  $result->last_request_at,
+            'redirect_uri'          =>  (isset($result->redirect_uri)) ? $result->redirect_uri : null,
+            'name'                  =>  $result->name,
+            'metadata'              =>  $metadata
         );
     }
 }

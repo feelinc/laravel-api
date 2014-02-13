@@ -13,8 +13,8 @@
 
 // OAuth2 Routes
 // -----------------------------------------------------------------------------
-Route::post('authorizations', function() {
-    return \Sule\Api\Facades\AuthorizationFacade::performAccessTokenFlow();
-});
+Route::post('authorizations', array('before' => 'api.limit', function() {
+    return \Sule\Api\Facades\Authorization::performAccessTokenFlow();
+}));
 // -----------------------------------------------------------------------------
 // END OAuth2 Routes

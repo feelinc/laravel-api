@@ -8,11 +8,14 @@ namespace Sule\Api\OAuth2;
  * file that was distributed with this source code.
  */
 
+use Illuminate\Support\Facades\Input;
+
 use League\OAuth2\Server\Authorization as Authorization;
+
+use Sule\Api\Facades\Response;
+
 use League\OAuth2\Server\Exception\ClientException;
 use Exception;
-use Response;
-use Input;
 
 class OAuthServer
 {
@@ -131,7 +134,8 @@ class OAuthServer
             // make this better in order to return the correct headers via the response object
             $error = $this->authServer->getExceptionType($e->getCode());
             $headers = $this->authServer->getExceptionHttpHeaders($error);
-            return Response::json($response, self::$exceptionHttpStatusCodes[$error], $headers);
+
+            return Response::resourceJson($response, self::$exceptionHttpStatusCodes[$error], $headers);
 
         } catch (Exception $e) {
 
@@ -141,9 +145,9 @@ class OAuthServer
                 'description' => $e->getMessage()
             );
 
-            return Response::json($response, 500);
+            return Response::resourceJson($response, 500);
         }
 
-        return Response::json($response);
+        return Response::resourceJson($response);
     }
 }

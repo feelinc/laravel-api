@@ -8,19 +8,19 @@ namespace Sule\Api\Facades;
  * file that was distributed with this source code.
  */
 
-use Illuminate\Support\Facades\Facade;
-
-class AuthorizationFacade extends Facade
+class Request extends \Illuminate\Support\Facades\Input
 {
 
     /**
-     * Get the registered name of the component
+     * Retrieve an input item from the request.
      *
+     * @param  string  $key
+     * @param  mixed   $default
      * @return string
-     * @codeCoverageIgnore
      */
-    protected static function getFacadeAccessor()
+    public function input($key = null, $default = null)
     {
-        return 'api.authorization';
+        return parent::input($key, $default);
     }
+
 }
