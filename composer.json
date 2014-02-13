@@ -9,7 +9,7 @@
     ],
     "require": {
         "php": ">=5.3.7",
-        "lucadegasperi/oauth2-server-laravel": "1.0.x"
+        "league/oauth2-server": "2.1.x"
     },
     "autoload": {
         "psr-0": {
