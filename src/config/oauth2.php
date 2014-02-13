@@ -22,7 +22,7 @@ return array(
             'callback'         => function ($username, $password) {
                 
                 $credentials = array(
-                    'email' => $username,
+                    'email'    => $username,
                     'password' => $password,
                 );
 

@@ -8,8 +8,18 @@ namespace Sule\Api\Facades;
  * file that was distributed with this source code.
  */
 
-class Request extends \Illuminate\Support\Facades\Input
+class Request extends \Illuminate\Support\Facades\Request
 {
+
+    /**
+     * Get all of the input and files for the request.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return parent::all();
+    }
 
     /**
      * Retrieve an input item from the request.

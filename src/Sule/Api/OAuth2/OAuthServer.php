@@ -26,30 +26,6 @@ class OAuthServer
     protected $authServer;
 
     /**
-     * Exception error HTTP status codes
-     * @var array
-     *
-     * RFC 6749, section 4.1.2.1.:
-     * No 503 status code for 'temporarily_unavailable', because
-     * "a 503 Service Unavailable HTTP status code cannot be
-     * returned to the client via an HTTP redirect"
-     */
-    protected static $exceptionHttpStatusCodes = array(
-        'invalid_request'           =>  400,
-        'unauthorized_client'       =>  400,
-        'access_denied'             =>  401,
-        'unsupported_response_type' =>  400,
-        'invalid_scope'             =>  400,
-        'server_error'              =>  500,
-        'temporarily_unavailable'   =>  400,
-        'unsupported_grant_type'    =>  501,
-        'invalid_client'            =>  401,
-        'invalid_grant'             =>  400,
-        'invalid_credentials'       =>  400,
-        'invalid_refresh'           =>  400
-    );
-
-    /**
      * Create a new OAuthServer
      * 
      * @param Authorization $authServer the OAuth Authorization Server to use
@@ -85,6 +61,16 @@ class OAuthServer
     }
 
     /**
+     * Return the Auth Server.
+     *
+     * @return Authorization
+     */
+    public function getAuthServer()
+    {
+        return $this->authServer;
+    }
+
+    /**
      * Check the authorization code request parameters
      * 
      * @throws \OAuth2\Exception\ClientException
@@ -106,48 +92,5 @@ class OAuthServer
     public function newAuthorizeRequest($owner, $owner_id, $options)
     {
         return $this->authServer->getGrantType('authorization_code')->newAuthoriseRequest($owner, $owner_id, $options);
-    }
-
-    /**
-     * Perform the access token flow
-     * 
-     * @return Response the appropriate response object
-     */
-    public function performAccessTokenFlow()
-    {
-        try {
-
-            // Get user input
-            $input = Input::all();
-
-            // Tell the auth server to issue an access token
-            $response = $this->authServer->issueAccessToken($input);
-
-        } catch (ClientException $e) {
-
-            // Throw an exception because there was a problem with the client's request
-            $response = array(
-                'message'     => $this->authServer->getExceptionType($e->getCode()),
-                'description' => $e->getMessage()
-            );
-
-            // make this better in order to return the correct headers via the response object
-            $error = $this->authServer->getExceptionType($e->getCode());
-            $headers = $this->authServer->getExceptionHttpHeaders($error);
-
-            return Response::resourceJson($response, self::$exceptionHttpStatusCodes[$error], $headers);
-
-        } catch (Exception $e) {
-
-            // Throw an error when a non-library specific exception has been thrown
-            $response = array(
-                'message'     => 'undefined_error',
-                'description' => $e->getMessage()
-            );
-
-            return Response::resourceJson($response, 500);
-        }
-
-        return Response::resourceJson($response);
     }
 }
