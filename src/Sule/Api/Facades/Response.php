@@ -54,16 +54,16 @@ class Response extends \Illuminate\Support\Facades\Response
             $headersToExpose[] = 'Link';
         }
 
-        if (array_key_exists('X-RateLimit-Limit', $headers)) {
-            $headersToExpose[] = 'X-RateLimit-Limit';
+        if (array_key_exists('X-Rate-Limit-Limit', $headers)) {
+            $headersToExpose[] = 'X-Rate-Limit-Limit';
         }
 
-        if (array_key_exists('X-RateLimit-Remaining', $headers)) {
-            $headersToExpose[] = 'X-RateLimit-Remaining';
+        if (array_key_exists('X-Rate-Limit-Remaining', $headers)) {
+            $headersToExpose[] = 'X-Rate-Limit-Remaining';
         }
 
-        if (array_key_exists('X-RateLimit-Reset', $headers)) {
-            $headersToExpose[] = 'X-RateLimit-Reset';
+        if (array_key_exists('X-Rate-Limit-Reset', $headers)) {
+            $headersToExpose[] = 'X-Rate-Limit-Reset';
         }
 
         $headers['Access-Control-Allow-Credentials'] = 'true';
