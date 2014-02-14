@@ -33,4 +33,76 @@ class Request extends \Illuminate\Support\Facades\Request
         return parent::input($key, $default);
     }
 
+    /**
+     * Retrieve a header from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string
+     */
+    public function header($key = null, $default = null)
+    {
+        return parent::header($key, $default);
+    }
+
+    /**
+     * Get the data format expected in the response.
+     *
+     * @return string
+     */
+    public function format($default = 'html')
+    {
+        return parent::format($default);
+    }
+
+    /**
+     * Determine if the request is sending JSON.
+     *
+     * @return bool
+     */
+    public function isJson()
+    {
+        return parent::isJson();
+    }
+
+    /**
+     * Check client request is having content type form.
+     *
+     * @return boolean
+     */
+    public function isFormRequest()
+    {
+        return str_contains($this->header('CONTENT_TYPE'), '/form-data');
+    }
+
+    /**
+     * Validate the request MD5 data header.
+     *
+     * @return boolean
+     */
+    public function validateMD5Data()
+    {
+        $md5 = $this->header('CONTENT_MD5');
+
+        if (empty($md5)) {
+            return false;
+        }
+
+        if (parent::isJson()) {
+            return (md5(parent::getContent()) == $md5);
+        }
+
+        $query = parent::instance()->query->all();
+
+        if ( ! empty($query)) {
+            foreach($query as $key => $item) {
+                if (str_contains($key, '/')) {
+                    unset($query[$key]);
+                }
+            }
+        }
+
+        return (md5(http_build_query($query)) == $md5);
+    }
+
 }

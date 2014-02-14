@@ -13,7 +13,11 @@
 
 // OAuth2 Routes
 // -----------------------------------------------------------------------------
-Route::post('authorizations', array('before' => 'api.limit', function() {
+Route::post('authorizations', array('before' => array(
+    'api.limit', 
+    'api.content.json', 
+    'api.content.md5'
+), function() {
     return App::make('api')->performAccessTokenFlow();
 }));
 // -----------------------------------------------------------------------------
