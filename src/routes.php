@@ -14,8 +14,9 @@
 // OAuth2 Routes
 // -----------------------------------------------------------------------------
 Route::post('authorizations', array('before' => array(
-    'api.limit', 
+    'api.ua.required', 
     'api.content.json', 
+    'api.limit', 
     'api.content.md5'
 ), function() {
     return App::make('api')->performAccessTokenFlow();

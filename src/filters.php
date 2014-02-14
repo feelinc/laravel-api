@@ -31,6 +31,13 @@ Route::filter('api.content.md5', function() {
     }
 });
 
+Route::filter('api.ua.required', function() {
+    if ( ! App::make('api')->getRequest()->validateUserAgent()) {
+        // 400 Bad Request - The request is malformed, such as if the body does not parse
+        return Response::make('', 400);
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Request Limit Filters

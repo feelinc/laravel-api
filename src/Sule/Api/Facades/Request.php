@@ -105,4 +105,16 @@ class Request extends \Illuminate\Support\Facades\Request
         return (md5(http_build_query($query)) == $md5);
     }
 
+    /**
+     * Validate the request User-Agent is not empty.
+     *
+     * @return boolean
+     */
+    public function validateUserAgent()
+    {
+        $userAgent = $this->header('USER_AGENT');
+
+        return ( ! empty($userAgent));
+    }
+
 }
