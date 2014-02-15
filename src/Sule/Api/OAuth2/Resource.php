@@ -47,6 +47,12 @@ class Resource
      * The scopes associated with the access token
      * @var array
      */
+    protected $sessionScopeIds = array();
+
+    /**
+     * The scopes associated with the access token
+     * @var array
+     */
     protected $sessionScopes = array();
 
     /**
@@ -193,10 +199,20 @@ class Resource
 
         $sessionScopes = $this->storages['session']->getScopes($this->accessToken);
         foreach ($sessionScopes as $scope) {
-            $this->sessionScopes[] = $scope['scope'];
+            $this->sessionScopeIds[] = $scope['id'];
+            $this->sessionScopes[]   = $scope['scope'];
         }
 
         return true;
+    }
+
+    /**
+     * Get the session scope ids
+     * @return array
+     */
+    public function getScopeIds()
+    {
+        return $this->sessionScopeIds;
     }
 
     /**

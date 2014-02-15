@@ -108,21 +108,43 @@ class Api
     }
 
     /**
+     * Authorize a new client
+     * @param  string $owner    The owner type
+     * @param  string $owner_id The owner id
+     * @param  array  $options  Additional options to issue an authorization code
+     * @return string           An authorization code
+     */
+    public function newAuthorizeRequest($owner, $owner_id, $options)
+    {
+        return $this->getOAuth()->getAuthServer()
+                    ->getGrantType('authorization_code')
+                    ->newAuthoriseRequest($owner, $owner_id, $options);
+    }
+
+    /**
      * Perform the access token flow
      * 
-     * @return Response the appropriate response object
+     * @param boolean $directResponse
+     * @param array $input
+     * @return Response the appropriate response object | array
      */
-    public function performAccessTokenFlow()
+    public function performAccessTokenFlow($directResponse = true, Array $input = array())
     {
         $authServer = $this->getOAuth()->getAuthServer();
 
         try {
 
             // Get user input
-            $input = $this->getRequest()->all();
+            if (empty($input)) {
+                $input = $this->getRequest()->all();
+            }
 
             // Tell the auth server to issue an access token
-            return $this->resourceJson($authServer->issueAccessToken($input));
+            if ($directResponse) {
+                return $this->resourceJson($authServer->issueAccessToken($input));
+            }
+
+            return $authServer->issueAccessToken($input);
 
         } catch (ClientException $e) {
 
@@ -136,7 +158,14 @@ class Api
             $error   = $authServer->getExceptionType($e->getCode());
             $headers = $authServer->getExceptionHttpHeaders($error);
 
-            return $this->resourceJson($response, self::$exceptionHttpStatusCodes[$error], $headers);
+            if ($directResponse) {
+                return $this->resourceJson($response, self::$exceptionHttpStatusCodes[$error], $headers);
+            }
+
+            $response['status']  = self::$exceptionHttpStatusCodes[$error];
+            $response['headers'] = $headers;
+
+            return $response;
 
         } catch (Exception $e) {
 
@@ -146,7 +175,13 @@ class Api
                 'description' => $e->getMessage()
             );
 
-            return $this->resourceJson($response, 500);
+            if ($directResponse) {
+                return $this->resourceJson($response, 500);
+            }
+
+            $response['status'] = 500;
+
+            return $response;
         }
     }
 

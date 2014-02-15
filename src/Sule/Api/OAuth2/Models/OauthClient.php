@@ -70,4 +70,14 @@ class OauthClient extends Model implements OauthClientInterface
         return parent::delete();
     }
 
+    /**
+     * Returns the relationship between client and endpoint.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function endpoint()
+    {
+        return $this->hasOne('Sule\Api\OAuth2\Models\OauthClientEndpoint', 'client_id');
+    }
+
 }

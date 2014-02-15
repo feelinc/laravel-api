@@ -56,6 +56,19 @@ class Request extends \Illuminate\Support\Facades\Request
     }
 
     /**
+     * Gets the scheme and HTTP host.
+     *
+     * If the URL was called with basic authentication, the user
+     * and the password are not added to the generated string.
+     *
+     * @return string The scheme and HTTP host
+     */
+    public function getSchemeAndHttpHost()
+    {
+        return parent::getSchemeAndHttpHost();
+    }
+
+    /**
      * Returns the user.
      *
      * @return string|null
