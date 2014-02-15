@@ -56,6 +56,26 @@ class Request extends \Illuminate\Support\Facades\Request
     }
 
     /**
+     * Returns the user.
+     *
+     * @return string|null
+     */
+    public function getUser()
+    {
+        return parent::getUser();
+    }
+
+    /**
+     * Returns the password.
+     *
+     * @return string|null
+     */
+    public function getPassword()
+    {
+        return parent::getPassword();
+    }
+
+    /**
      * Determine if the request is sending JSON.
      *
      * @return bool
@@ -101,7 +121,7 @@ class Request extends \Illuminate\Support\Facades\Request
                 }
             }
         }
-        
+
         return (md5(http_build_query($query)) == $md5);
     }
 
