@@ -263,9 +263,11 @@ class FluentSession implements SessionInterface, SessionManagementInterface
         $result = DB::table('oauth_session_access_tokens')
                     ->select('oauth_session_access_tokens.session_id as session_id',
                             'oauth_sessions.client_id as client_id',
+                            'oauth_clients.secret as client_secret',
                             'oauth_sessions.owner_id as owner_id',
                             'oauth_sessions.owner_type as owner_type')
                     ->join('oauth_sessions', 'oauth_session_access_tokens.session_id', '=', 'oauth_sessions.id')
+                    ->join('oauth_clients', 'oauth_sessions.client_id', '=', 'oauth_clients.id')
                     ->where('access_token', $accessToken)
                     ->where('access_token_expires', '>=', time())
                     ->first();

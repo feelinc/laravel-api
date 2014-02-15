@@ -31,7 +31,7 @@ class ApiServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		$this->package('sule/api', 'sule/api/authorization');
+		$this->package('sule/api', 'sule/api');
 
         // Load the filters
         include __DIR__.'/../../filters.php';
@@ -71,7 +71,7 @@ class ApiServiceProvider extends ServiceProvider
 
             $server = $app->make('League\OAuth2\Server\Authorization');
 
-            $config = $app['config']->get('sule/api/authorization::oauth2');
+            $config = $app['config']->get('sule/api::oauth2');
 
             // add the supported grant types to the authorization server
             foreach ($config['grant_types'] as $grantKey => $grantValue) {
@@ -112,7 +112,7 @@ class ApiServiceProvider extends ServiceProvider
 
         $this->app['api.resource'] = $this->app->share(function ($app) {
 
-            return $app->make('League\OAuth2\Server\Resource');
+            return $app->make('Sule\Api\OAuth2\Resource');
 
         });
     }

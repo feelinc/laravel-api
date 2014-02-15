@@ -35,6 +35,8 @@ class Api
 
     protected $client = null;
 
+    protected $accessToken = '';
+
     /**
      * Exception error HTTP status codes
      * @var array
@@ -326,14 +328,15 @@ class Api
         $clientId     = $this->getRequest()->input('client_id', '');
         $clientSecret = $this->getRequest()->input('client_secret', null);
         $redirectUri  = $this->getRequest()->input('redirect_uri', null);
-        $accessToken  = $this->getRequest()->input('validateAccessToken', '');
+        $accessToken  = $this->getResource()->determineAccessToken();
 
         if ( ! empty($accessToken)) {
             $sessionRepository = new FluentSession();
             $sesion            = $sessionRepository->validateAccessToken($accessToken);
 
             if ($sesion !== false) {
-                $clientId = $sesion->client_id;
+                $clientId     = $sesion['client_id'];
+                $clientSecret = $sesion['client_secret'];
             }
 
             unset($sessionRepository);

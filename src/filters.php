@@ -11,7 +11,7 @@
 */
 
 Route::filter('api.oauth', function($route, $request, $scope = null) {
-    return App::make('api')->getRequest()->validateAccessToken($scope);
+    return App::make('api')->validateAccessToken($scope);
 });
 
 /*
