@@ -2,7 +2,21 @@
 
 /*
 |--------------------------------------------------------------------------
-| Request Header and Content Validator
+| OAuth Filters
+|--------------------------------------------------------------------------
+|
+| The following filters are used to verify we receive a good header and 
+| content.
+|
+*/
+
+Route::filter('api.oauth', function($route, $request, $scope = null) {
+    return App::make('api')->getRequest()->validateAccessToken($scope);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Request Header and Content Validator Filters
 |--------------------------------------------------------------------------
 |
 | The following filters are used to verify we receive a good header and 

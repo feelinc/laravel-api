@@ -15,16 +15,23 @@ use Sule\Api\OAuth2\Models\OauthClient;
 use Sule\Api\OAuth2\Repositories\FluentClient;
 use Sule\Api\OAuth2\Repositories\FluentSession;
 
+use League\OAuth2\Server\Resource;
+
 use DateTime;
 
 use League\OAuth2\Server\Exception\ClientException;
+use League\OAuth2\Server\Exception\InvalidAccessTokenException;
 
 class Api
 {
 
+    protected $config;
+
     protected $request;
 
     protected $OAuth;
+
+    protected $resource;
 
     protected $client = null;
 
@@ -55,13 +62,18 @@ class Api
 	/**
      * Create a new instance.
      *
+     * @param  array $config
      * @param  Request $request
+     * @param  OAuthServer $OAuth
+     * @param  Resource $resource
      * @return void
      */
-    public function __construct(Request $request, OAuthServer $OAuth)
+    public function __construct(Array $config, Request $request, OAuthServer $OAuth, Resource $resource)
     {
-        $this->request = $request;
-        $this->OAuth   = $OAuth;
+        $this->config   = $config;
+        $this->request  = $request;
+        $this->OAuth    = $OAuth;
+        $this->resource = $resource;
     }
 
     /**
@@ -138,6 +150,54 @@ class Api
     }
 
     /**
+     * Validate OAuth token
+     *
+     * @param string $scope additional filter arguments
+     * @return Response|null a bad response in case the request is invalid
+     */
+    public function validateAccessToken($scope = null)
+    {
+        try {
+            $this->getResource()->isValid($this->getConfig('http_headers_only'));
+        } catch (InvalidAccessTokenException $e) {
+            return $this->resourceJson(array(
+                'message'     => 'forbidden',
+                'description' => $e->getMessage(),
+            ), 403);
+        }
+
+        if ( ! is_null($scope)) {
+            $scopes = explode(',', $scope);
+
+            foreach ($scopes as $item) {
+                if ( ! $this->getResource()->hasScope($item)) {
+                    return $this->resourceJson(array(
+                        'message'     => 'forbidden',
+                        'description' => 'Only access token with scope '.$item.' can use this endpoint',
+                    ), 403);
+                }
+            }
+
+            unset($scopes);
+        }
+    }
+
+    /**
+     * Return the configuration.
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getConfig($key)
+    {
+        if (isset($this->config[$key])) {
+            return $this->config[$key];
+        }
+
+        return '';
+    }
+
+    /**
      * Return the request handler.
      *
      * @return Request
@@ -155,6 +215,16 @@ class Api
     public function getOAuth()
     {
         return $this->OAuth;
+    }
+
+    /**
+     * Return the resource handler.
+     *
+     * @return Resource
+     */
+    public function getResource()
+    {
+        return $this->resource;
     }
 
     /**

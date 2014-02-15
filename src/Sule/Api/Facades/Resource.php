@@ -10,7 +10,7 @@ namespace Sule\Api\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Authorization extends Facade
+class Resource extends Facade
 {
 
     /**
@@ -18,6 +18,6 @@ class Authorization extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'api.authorization'; }
-
+    protected static function getFacadeAccessor() { return 'api.resource'; }
+    
 }

@@ -8,10 +8,12 @@ namespace Sule\Api\Facades;
  * file that was distributed with this source code.
  */
 
+use Illuminate\Support\Facades\Facade;
+
 /**
  * @see \Sule\Api\Api
  */
-class API
+class API extends Facade
 {
 
 	/**

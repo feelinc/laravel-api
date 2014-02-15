@@ -31,7 +31,7 @@ class ApiServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		$this->package('sule/api', 'sule/api');
+		$this->package('sule/api', 'sule/api', 'sule/api');
 
         // Load the filters
         include __DIR__.'/../../filters.php';
@@ -47,8 +47,17 @@ class ApiServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-        $this->registerOAuthServer();
-        $this->registerApi();
+        $config = $this->app['config']->get('sule/api::oauth2');
+
+        echo '<pre>';
+        print_r($config);
+        echo '</pre>';
+        exit();
+
+        $this->registerOAuthServer($config);
+        $this->registerApi($config);
+
+        unset($config);
 
         // Register artisan commands
 		$this->registerCommands();
@@ -57,20 +66,19 @@ class ApiServiceProvider extends ServiceProvider
     /**
      * Register the OAuth server.
      *
+     * @param array $config
      * @return void
      */
-    private function registerOAuthServer()
+    private function registerOAuthServer(Array $config)
     {
         $this->app->bind('League\OAuth2\Server\Storage\ClientInterface', 'Sule\Api\OAuth2\Repositories\FluentClient');
         $this->app->bind('League\OAuth2\Server\Storage\ScopeInterface', 'Sule\Api\OAuth2\Repositories\FluentScope');
         $this->app->bind('League\OAuth2\Server\Storage\SessionInterface', 'Sule\Api\OAuth2\Repositories\FluentSession');
         $this->app->bind('Sule\Api\OAuth2\Repositories\SessionManagementInterface', 'Sule\Api\OAuth2\Repositories\FluentSession');
 
-        $this->app['api.authorization'] = $this->app->share(function ($app) {
+        $this->app['api.authorization'] = $this->app->share(function ($app) use ($config) {
 
             $server = $app->make('League\OAuth2\Server\Authorization');
-
-            $config = $app['config']->get('sule/api::oauth2');
 
             // add the supported grant types to the authorization server
             foreach ($config['grant_types'] as $grantKey => $grantValue) {
@@ -108,17 +116,29 @@ class ApiServiceProvider extends ServiceProvider
             return new OAuthServer($server);
 
         });
+
+        // $this->app['api.resource'] = $this->app->share(function ($app) {
+
+        //     return $app->make('League\OAuth2\Server\Resource');
+
+        // });
     }
 
     /**
      * Register the Api.
      *
+     * @param array $config
      * @return void
      */
-    public function registerApi()
+    public function registerApi(Array $config)
     {
-        $this->app['api'] = $this->app->share(function ($app) {
-            return new Api(new Request(), $app['api.authorization']);
+        $this->app['api'] = $this->app->share(function ($app) use ($config) {
+            return new Api(
+                $config, 
+                new Request(), 
+                $app['api.authorization'], 
+                $app['api.resource']
+            );
         });
     }
 
@@ -158,7 +178,7 @@ class ApiServiceProvider extends ServiceProvider
 	 */
 	public function provides()
 	{
-		return array('api', 'api.authorization');
+		return array('api', 'api.authorization', 'api.resource');
 	}
 
 }
