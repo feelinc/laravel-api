@@ -11,11 +11,10 @@ namespace Sule\Api;
 use Sule\Api\Facades\Request;
 use Sule\Api\Facades\Response;
 use Sule\Api\OAuth2\OAuthServer;
+use Sule\Api\OAuth2\Resource;
 use Sule\Api\OAuth2\Models\OauthClient;
 use Sule\Api\OAuth2\Repositories\FluentClient;
 use Sule\Api\OAuth2\Repositories\FluentSession;
-
-use League\OAuth2\Server\Resource;
 
 use DateTime;
 
@@ -328,9 +327,10 @@ class Api
         $clientId     = $this->getRequest()->input('client_id', '');
         $clientSecret = $this->getRequest()->input('client_secret', null);
         $redirectUri  = $this->getRequest()->input('redirect_uri', null);
-        $accessToken  = $this->getResource()->determineAccessToken();
 
-        if ( ! empty($accessToken)) {
+        try {
+            $accessToken  = $this->getResource()->determineAccessToken();
+
             $sessionRepository = new FluentSession();
             $sesion            = $sessionRepository->validateAccessToken($accessToken);
 
@@ -341,7 +341,7 @@ class Api
 
             unset($sessionRepository);
             unset($sesion);
-        }
+        } catch (InvalidAccessTokenException $e) {}
 
         if ( ! empty($clientId)) {
             $clientRepository = new FluentClient();

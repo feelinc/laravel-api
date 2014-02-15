@@ -5,8 +5,7 @@
 | OAuth Filters
 |--------------------------------------------------------------------------
 |
-| The following filters are used to verify we receive a good header and 
-| content.
+| The following filters are used to verify OAuth token.
 |
 */
 

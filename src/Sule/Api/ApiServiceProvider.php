@@ -66,7 +66,6 @@ class ApiServiceProvider extends ServiceProvider
         $this->app->bind('League\OAuth2\Server\Storage\SessionInterface', 'Sule\Api\OAuth2\Repositories\FluentSession');
         $this->app->bind('Sule\Api\OAuth2\Repositories\SessionManagementInterface', 'Sule\Api\OAuth2\Repositories\FluentSession');
 
-
         $this->app['api.authorization'] = $this->app->share(function ($app) {
 
             $server = $app->make('League\OAuth2\Server\Authorization');
