@@ -9,8 +9,17 @@
 |
 */
 
-Route::filter('api.oauth', function($route, $request, $scope = null) {
-    return App::make('api')->validateAccessToken($scope);
+Route::filter('api.oauth', function() {
+    $argList = array();
+    
+    if (func_num_args() > 0) {
+        $argList = func_get_args();
+
+        unset($argList[0]);
+        unset($argList[1]);
+    }
+    
+    return App::make('api')->validateAccessToken($argList);
 });
 
 /*

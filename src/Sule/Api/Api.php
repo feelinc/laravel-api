@@ -188,10 +188,10 @@ class Api
     /**
      * Validate OAuth token
      *
-     * @param string $scope additional filter arguments
+     * @param array $scope additional filter arguments
      * @return Response|null a bad response in case the request is invalid
      */
-    public function validateAccessToken($scope = null)
+    public function validateAccessToken(Array $scopes = array())
     {
         try {
             $this->getResource()->isValid($this->getConfig('http_headers_only'));
@@ -202,9 +202,7 @@ class Api
             ), 403);
         }
 
-        if ( ! is_null($scope)) {
-            $scopes = explode(',', $scope);
-
+        if ( ! empty($scopes)) {
             foreach ($scopes as $item) {
                 if ( ! $this->getResource()->hasScope($item)) {
                     return $this->resourceJson(array(
@@ -213,8 +211,6 @@ class Api
                     ), 403);
                 }
             }
-
-            unset($scopes);
         }
     }
 
