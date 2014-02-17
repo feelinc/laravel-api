@@ -122,7 +122,7 @@ class Response extends \Illuminate\Support\Facades\Response
     public static function collectionJson($data = array(), $status = 200, array $headers = array())
     {
         $collection = new Collection($data);
-        $etag = $collection->getEtag();
+        $etag = $collection->getEtags();
 
         if ( ! empty($etag)) {
             $headers['ETag'] = $etag;

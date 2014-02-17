@@ -100,7 +100,7 @@ class Api
      * @param  array  $headers
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function collectionJson($data = array(), $status = 200, array $headers = array())
+    public function collectionJson($data = array(), $status = 200, array $headers = array())
     {
         $headers = array_merge($headers, $this->getRequestLimitHeader());
 
