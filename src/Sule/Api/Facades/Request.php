@@ -71,6 +71,18 @@ class Request extends \Illuminate\Support\Facades\Request
     }
 
     /**
+     * Retrieve a server variable from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string
+     */
+    public function server($key = null, $default = null)
+    {
+        return parent::server($key, $default);
+    }
+
+    /**
      * Retrieve a header from the request.
      *
      * @param  string  $key
