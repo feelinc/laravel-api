@@ -56,6 +56,27 @@ class Request extends \Illuminate\Support\Facades\Request
     }
 
     /**
+     * Returns the path being requested relative to the executed script.
+     *
+     * The path info always starts with a /.
+     *
+     * Suppose this request is instantiated from /mysite on localhost:
+     *
+     *  * http://localhost/mysite              returns an empty string
+     *  * http://localhost/mysite/about        returns '/about'
+     *  * http://localhost/mysite/enco%20ded   returns '/enco%20ded'
+     *  * http://localhost/mysite/about?var=1  returns '/about'
+     *
+     * @return string The raw path (i.e. not urldecoded)
+     *
+     * @api
+     */
+    public function getPathInfo()
+    {
+        return parent::getPathInfo();
+    }
+
+    /**
      * Gets the scheme and HTTP host.
      *
      * If the URL was called with basic authentication, the user

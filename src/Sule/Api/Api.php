@@ -88,6 +88,7 @@ class Api
     public function resourceJson($data = array(), $status = 200, array $headers = array())
     {
         $headers = array_merge($headers, $this->getRequestLimitHeader());
+        $headers = array_merge($headers, $this->getConfig('headers'));
 
         return Response::resourceJson($data, $status, $headers);
     }
@@ -103,6 +104,7 @@ class Api
     public function collectionJson($data = array(), $status = 200, array $headers = array())
     {
         $headers = array_merge($headers, $this->getRequestLimitHeader());
+        $headers = array_merge($headers, $this->getConfig('headers'));
 
         return Response::collectionJson($data, $status, $headers);
     }
@@ -194,7 +196,7 @@ class Api
     public function validateAccessToken(Array $scopes = array())
     {
         try {
-            $this->getResource()->isValid($this->getConfig('http_headers_only'));
+            $this->getResource()->isValid($this->getConfig('oauth2.http_headers_only'));
         } catch (InvalidAccessTokenException $e) {
             return $this->resourceJson(array(
                 'message'     => 'forbidden',
@@ -222,11 +224,34 @@ class Api
      */
     public function getConfig($key)
     {
-        if (isset($this->config[$key])) {
-            return $this->config[$key];
+        if (empty($key)) {
+            return '';
         }
 
-        return '';
+        $keys  = explode('.', $key);
+        $value = array();
+
+        if (isset($this->config[$keys[0]])) {
+            $value = $this->config[$keys[0]];
+        }
+
+        if (empty($value)) {
+            return $value;
+        }
+
+        $totalKey = count($keys);
+
+        if ($totalKey > 1) {
+            for ($i = 1; $i < $totalKey; ++$i) {
+                if (isset($value[$keys[$i]])) {
+                    $value = $value[$keys[$i]];
+                }
+            }
+        }
+
+        unset($keys);
+
+        return $value;
     }
 
     /**

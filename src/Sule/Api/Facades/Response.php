@@ -66,9 +66,7 @@ class Response extends \Illuminate\Support\Facades\Response
             $headersToExpose[] = 'X-Rate-Limit-Reset';
         }
 
-        $headers['Access-Control-Allow-Credentials'] = 'true';
-        $headers['Access-Control-Allow-Origin']      = '*';
-        $headers['Access-Control-Expose-Headers']    = implode(', ', $headersToExpose);
+        $headers['Access-Control-Expose-Headers'] = implode(', ', $headersToExpose);
 
         if ($etagMatch) {
             $response = parent::make('', 304, $headers);

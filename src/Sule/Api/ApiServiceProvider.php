@@ -124,12 +124,10 @@ class ApiServiceProvider extends ServiceProvider
     public function registerApi()
     {
         $this->app['api'] = $this->app->share(function ($app) {
-            return new Api(
-                $app['config']->get('sule/api::oauth2'), 
-                new Request(), 
-                $app['api.authorization'], 
-                $app['api.resource']
-            );
+            $config = $app['config']->get('sule/api::config');
+            $config['oauth2'] = $app['config']->get('sule/api::oauth2');
+
+            return new Api($config, new Request(), $app['api.authorization'], $app['api.resource']);
         });
     }
 
