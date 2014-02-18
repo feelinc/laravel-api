@@ -34,6 +34,43 @@ class Request extends \Illuminate\Support\Facades\Request
     }
 
     /**
+     * Retrieve a file from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return \Symfony\Component\HttpFoundation\File\UploadedFile|array
+     */
+    public function file($key = null, $default = null)
+    {
+        return parent::file($key, $default);
+    }
+
+    /**
+     * Determine if the uploaded data contains a file.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function hasFile($key)
+    {
+        return parent::hasFile($key);
+    }
+
+    /**
+     * Returns the request body content.
+     *
+     * @param Boolean $asResource If true, a resource will be returned
+     *
+     * @return string|resource The request body content or a resource to read the body stream.
+     *
+     * @throws \LogicException
+     */
+    public function getContent($asResource = false)
+    {
+        return parent::getContent($asResource);
+    }
+
+    /**
      * Retrieve a header from the request.
      *
      * @param  string  $key

@@ -2,6 +2,32 @@
 
 /*
 |--------------------------------------------------------------------------
+| Application & Route Filters
+|--------------------------------------------------------------------------
+|
+| Below you will find the "before" and "after" events for the application
+| which may be used to do any work before or after a request into your
+| application. Here you may also register your custom route filters.
+|
+*/
+
+App::after(function($request, $response)
+{
+    if ($request->isMethod('OPTIONS')) {
+        $headers = App::make('api')->getConfig('headers');
+
+        if ( ! empty($headers)) {
+            foreach ($headers as $key => $value) {
+                $response->header($key, $value);
+            }
+        }
+
+        unset($headers);
+    }
+});
+
+/*
+|--------------------------------------------------------------------------
 | OAuth Filters
 |--------------------------------------------------------------------------
 |
