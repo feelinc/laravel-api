@@ -282,7 +282,9 @@ class Resource
             return $accessToken;
         } elseif ($headersOnly === false) {
             $method = $this->getRequest()->server('REQUEST_METHOD');
-            $accessToken = $this->getRequest()->{$method}($this->tokenKey);
+            if (method_exists($this->getRequest(), $method)) {
+                $accessToken = $this->getRequest()->{$method}($this->tokenKey);
+            }
         }
 
         if (empty($accessToken)) {
