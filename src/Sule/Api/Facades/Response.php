@@ -25,7 +25,7 @@ class Response extends \Illuminate\Support\Facades\Response
      * @param  array  $headers
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function json($data = array(), $status = 200, array $headers = array())
+    public static function json($data = array(), $status = 200, array $headers = array(), $options = 0)
     {
         $etagMatch       = false;
         $headersToExpose = array();
