@@ -187,12 +187,14 @@ class Request extends \Illuminate\Support\Facades\Request
     {
         $md5 = $this->header('CONTENT_MD5');
 
-        if (empty($md5)) {
-            return false;
-        }
-
         if (parent::isJson()) {
-            return (md5(parent::getContent()) == $md5);
+            $content = parent::getContent();
+
+            if (empty($md5) and empty($content)) {
+                return true;
+            }
+
+            return (md5($content) == $md5);
         }
 
         $query = parent::instance()->query->all();
@@ -203,6 +205,10 @@ class Request extends \Illuminate\Support\Facades\Request
                     unset($query[$key]);
                 }
             }
+        }
+
+        if (empty($md5) and empty($query)) {
+            return true;
         }
 
         return (md5(http_build_query($query)) == $md5);
