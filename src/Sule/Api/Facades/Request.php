@@ -181,9 +181,10 @@ class Request extends \Illuminate\Support\Facades\Request
     /**
      * Validate the request MD5 data header.
      *
+     * @param  string $clientSecret
      * @return boolean
      */
-    public function validateMD5Data()
+    public function validateMD5Data($clientSecret = '')
     {
         $md5 = $this->header('CONTENT_MD5');
 
@@ -194,7 +195,7 @@ class Request extends \Illuminate\Support\Facades\Request
                 return true;
             }
 
-            return (md5($content) == $md5);
+            return (md5($content.$clientSecret) == $md5);
         }
 
         $query = parent::instance()->query->all();
@@ -211,7 +212,7 @@ class Request extends \Illuminate\Support\Facades\Request
             return true;
         }
 
-        return (md5(http_build_query($query)) == $md5);
+        return (md5(http_build_query($query).$clientSecret) == $md5);
     }
 
     /**

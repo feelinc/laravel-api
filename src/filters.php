@@ -73,7 +73,7 @@ Route::filter('api.content.json', function() {
 });
 
 Route::filter('api.content.md5', function() {
-    if ( ! App::make('api')->getRequest()->validateMD5Data()) {
+    if ( ! App::make('api')->isValidMD5()) {
         // 400 Bad Request - The request is malformed, such as if the body does not parse
         return Response::make('', 400);
     }

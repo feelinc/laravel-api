@@ -78,6 +78,16 @@ class Api
     }
 
     /**
+     * Return current access token.
+     *
+     * @return string
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
      * Return a new JSON response.
      *
      * @param  string|array  $data
@@ -299,6 +309,22 @@ class Api
     }
 
     /**
+     * Check client content MD5.
+     *
+     * @return boolean
+     */
+    public function isValidMD5()
+    {
+        $client = $this->getClient();
+
+        if (is_null($client)) {
+            return false;
+        }
+
+        return $this->getRequest()->validateMD5Data($client->secret);
+    }
+
+    /**
      * Check client request limit and update.
      *
      * @return boolean
@@ -385,10 +411,10 @@ class Api
         $redirectUri  = $this->getRequest()->input('redirect_uri', null);
 
         try {
-            $accessToken  = $this->getResource()->determineAccessToken();
+            $this->accessToken  = $this->getResource()->determineAccessToken();
 
             $sessionRepository = new FluentSession();
-            $sesion            = $sessionRepository->validateAccessToken($accessToken);
+            $sesion            = $sessionRepository->validateAccessToken($this->accessToken);
 
             if ($sesion !== false) {
                 $clientId     = $sesion['client_id'];
@@ -425,7 +451,6 @@ class Api
         unset($clientId);
         unset($clientSecret);
         unset($redirectUri);
-        unset($accessToken);
     }
 
 }
