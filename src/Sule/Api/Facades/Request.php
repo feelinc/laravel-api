@@ -187,7 +187,7 @@ class Request extends \Illuminate\Support\Facades\Request
     public function validateMD5Data($clientSecret = '')
     {
         $md5 = $this->header('CONTENT_MD5');
-
+        
         if (parent::isJson()) {
             $content = parent::getContent();
 
@@ -198,21 +198,21 @@ class Request extends \Illuminate\Support\Facades\Request
             return (md5($content.$clientSecret) == $md5);
         }
 
-        $query = parent::instance()->query->all();
+        $input = $this->all();
 
-        if ( ! empty($query)) {
-            foreach($query as $key => $item) {
+        if ( ! empty($input)) {
+            foreach($input as $key => $item) {
                 if (str_contains($key, '/')) {
-                    unset($query[$key]);
+                    unset($input[$key]);
                 }
             }
         }
 
-        if (empty($md5) and empty($query)) {
+        if (empty($md5) and empty($input)) {
             return true;
         }
 
-        return (md5(http_build_query($query).$clientSecret) == $md5);
+        return (md5(http_build_query($input).$clientSecret) == $md5);
     }
 
     /**

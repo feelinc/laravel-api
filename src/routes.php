@@ -15,7 +15,6 @@
 // -----------------------------------------------------------------------------
 Route::post('authorizations', array('before' => array(
     'api.ua.required', 
-    'api.content.json', 
     'api.limit', 
     'api.content.md5'
 ), function() {

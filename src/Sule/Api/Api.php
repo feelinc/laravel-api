@@ -316,12 +316,13 @@ class Api
     public function isValidMD5()
     {
         $client = $this->getClient();
-
-        if (is_null($client)) {
-            return false;
+        $secret = '';
+        if ( ! is_null($client)) {
+            $secret = $client->secret;
         }
+        unset($client);
 
-        return $this->getRequest()->validateMD5Data($client->secret);
+        return $this->getRequest()->validateMD5Data($secret);
     }
 
     /**

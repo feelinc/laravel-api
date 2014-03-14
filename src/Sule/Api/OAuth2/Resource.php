@@ -8,6 +8,8 @@ namespace Sule\Api\OAuth2;
  * file that was distributed with this source code.
  */
 
+use Illuminate\Support\Facades\Request as RequestFacade;
+
 use League\OAuth2\Server\Storage\SessionInterface;
 use League\OAuth2\Server\Util\RequestInterface;
 use League\OAuth2\Server\Util\Request;
@@ -281,10 +283,11 @@ class Resource
         if ( ! empty($accessToken)) {
             return $accessToken;
         } elseif ($headersOnly === false) {
-            $method = $this->getRequest()->server('REQUEST_METHOD');
-            if (method_exists($this->getRequest(), $method)) {
-                $accessToken = $this->getRequest()->{$method}($this->tokenKey);
+            $input = RequestFacade::all();
+            if (array_key_exists($this->tokenKey, $input)) {
+                $accessToken = $input[$this->tokenKey];
             }
+            unset($input);
         }
 
         if (empty($accessToken)) {
