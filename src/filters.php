@@ -61,28 +61,28 @@ Route::filter('api.oauth', function() {
 Route::filter('api.content.form', function() {
     if ( ! App::make('api')->getRequest()->isFormRequest()) {
         // 415 Unsupported Media Type - If incorrect content type was provided as part of the request
-        return Response::make('', 415);
+        return Response::make('Content-Type is not form', 415);
     }
 });
 
 Route::filter('api.content.json', function() {
     if ( ! App::make('api')->getRequest()->isJson()) {
         // 415 Unsupported Media Type - If incorrect content type was provided as part of the request
-        return Response::make('', 415);
+        return Response::make('Content-Type is not JSON', 415);
     }
 });
 
 Route::filter('api.content.md5', function() {
     if ( ! App::make('api')->isValidMD5()) {
         // 400 Bad Request - The request is malformed, such as if the body does not parse
-        return Response::make('', 400);
+        return Response::make('Content is not valid', 400);
     }
 });
 
 Route::filter('api.ua.required', function() {
     if ( ! App::make('api')->getRequest()->validateUserAgent()) {
         // 400 Bad Request - The request is malformed, such as if the body does not parse
-        return Response::make('', 400);
+        return Response::make('User-Agent is not defined', 400);
     }
 });
 
@@ -99,6 +99,6 @@ Route::filter('api.ua.required', function() {
 Route::filter('api.limit', function() {
     if (App::make('api')->checkRequestLimit()) {
         // 429 Too Many Requests - When a request is rejected due to rate limiting
-        return Response::make('', 429);
+        return Response::make('Too many request performed', 429);
     }
 });
