@@ -11,7 +11,7 @@ namespace Sule\Api;
 use Illuminate\Support\ServiceProvider;
 
 use Sule\Api\Api;
-use Sule\Api\Facades\Request;
+use Sule\Api\Facades\Response;
 use Sule\Api\OAuth2\OAuthServer;
 
 class ApiServiceProvider extends ServiceProvider
@@ -127,7 +127,7 @@ class ApiServiceProvider extends ServiceProvider
             $config = $app['config']->get('sule/api::config');
             $config['oauth2'] = $app['config']->get('sule/api::oauth2');
 
-            return new Api($config, new Request(), $app['api.authorization'], $app['api.resource']);
+            return new Api($config, $app['request'], new Response(), $app['api.authorization'], $app['api.resource']);
         });
     }
 
