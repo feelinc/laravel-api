@@ -124,3 +124,16 @@ Route::post('api/v1/users', array(
     }
 ));
 ```
+
+## Response
+Return JSON response including Limiter and Access-Control-Expose-Headers header
+
+### 1. Single JSON object
+```php
+return API::resourceJson($data = array(), $status = 200, array $headers = array());
+```
+
+### 2. Collection JSON object
+```php
+return API::collectionJson($data = array(), $status = 200, array $headers = array());
+```
