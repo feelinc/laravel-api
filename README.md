@@ -68,3 +68,19 @@ client_secret: C4vpZLRI2kncfXJQZ9l0hdnaTCTupyqF1deCVEPf
     "expires_in": 3600
 }
 ```
+
+## Filters
+
+### 2. api.oauth
+Check route againts authorized client and passed scope, in example:
+```php
+Route::get('api/v1/users', array(
+    'before' => array(
+        'api.oauth:read'
+    ), function() {
+
+        
+
+    }
+));
+```
