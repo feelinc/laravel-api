@@ -37,7 +37,10 @@ Add the following to the list of service providers in "app/config/app.php".
 'Sule\Api\ApiServiceProvider',
 ```
 
-### 3. Configuration
+### 3. Create Tables
+Create all required tables from "TABLES.sql" file.
+
+### 4. Configuration
 After installing, you can publish the package's configuration file into your application, by running the following command:
 ```txt
 php artisan config:publish sule/api
