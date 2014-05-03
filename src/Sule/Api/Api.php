@@ -407,7 +407,7 @@ class Api
         }
 
         // Do validation for others than JSON data
-        $input = $this->all();
+        $input = $this->getRequest()->all();
 
         if ( ! empty($input)) {
             foreach($input as $key => $item) {
