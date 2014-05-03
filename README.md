@@ -26,18 +26,18 @@ Open your composer.json file and add the following lines:
 }
 ```
 Run composer update from the command line
-```json
+```txt
 composer update
 ```
 
 ### 2. Service Provider
 Add the following to the list of service providers in "app/config/app.php".
-```json
+```txt
 'Sule\Api\ApiServiceProvider',
 ```
 
 ### 3. Configuration
 After installing, you can publish the package's configuration file into your application, by running the following command:
-```json
+```txt
 php artisan config:publish sule/api
 ```
