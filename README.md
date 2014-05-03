@@ -27,13 +27,13 @@ Open your composer.json file and add the following lines:
 }
 ```
 Run composer update from the command line
-```txt
+```
 composer update
 ```
 
 ### 2. Service Provider
 Add the following to the list of service providers in "app/config/app.php".
-```txt
+```
 'Sule\Api\ApiServiceProvider',
 ```
 
@@ -47,13 +47,13 @@ php artisan config:publish sule/api
 POST /authorization
 
 ### Request Headers
-```txt
+```
 User-Agent: My User Agent 
 Content-MD5: md5($stringContent.$clientSecret) 
 ```
 
 ### Request Body
-```txt
+```
 grant_type:    client_credentials 
 client_id:     JXSb6nEzpQ0e3WAWjsSsZurCaLy0knDjzkwxRlJs 
 client_secret: C4vpZLRI2kncfXJQZ9l0hdnaTCTupyqF1deCVEPf 
@@ -71,15 +71,55 @@ client_secret: C4vpZLRI2kncfXJQZ9l0hdnaTCTupyqF1deCVEPf
 
 ## Filters
 
-### 2. api.oauth
-Check route againts authorized client and passed scope, in example:
+### 1. api.oauth
+Check route againts authorized client and passed scope, in example checking current client is having "read" scope:
 ```php
 Route::get('api/v1/users', array(
     'before' => array(
         'api.oauth:read'
     ), function() {
 
-        
+    }
+));
+```
+
+### 2. api.content.md5
+Check request content signature at "Content-MD5" header. Signature should be md5($stringContent.$clientSecret)
+```php
+Route::get('api/v1/users', array(
+    'before' => array(
+        'api.content.md5', 
+        'api.oauth:read'
+    ), function() {
+
+    }
+));
+```
+
+### 3. api.ua.required
+Check request "User-Agent" header.
+```php
+Route::get('api/v1/users', array(
+    'before' => array(
+        'api.ua.required', 
+        'api.content.md5', 
+        'api.oauth:read'
+    ), function() {
+
+    }
+));
+```
+
+### 4. api.limit
+Check request not exceed the limit per each client.
+```php
+Route::get('api/v1/users', array(
+    'before' => array(
+        'api.ua.required', 
+        'api.content.md5', 
+        'api.limit', 
+        'api.oauth:read'
+    ), function() {
 
     }
 ));
