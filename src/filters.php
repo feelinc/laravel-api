@@ -58,20 +58,6 @@ Route::filter('api.oauth', function() {
 |
 */
 
-Route::filter('api.content.form', function() {
-    if ( ! App::make('api')->getRequest()->isFormRequest()) {
-        // 415 Unsupported Media Type - If incorrect content type was provided as part of the request
-        return Response::make('Content-Type is not form', 415);
-    }
-});
-
-Route::filter('api.content.json', function() {
-    if ( ! App::make('api')->getRequest()->isJson()) {
-        // 415 Unsupported Media Type - If incorrect content type was provided as part of the request
-        return Response::make('Content-Type is not JSON', 415);
-    }
-});
-
 Route::filter('api.content.md5', function() {
     if ( ! App::make('api')->isValidMD5()) {
         // 400 Bad Request - The request is malformed, such as if the body does not parse
@@ -80,7 +66,7 @@ Route::filter('api.content.md5', function() {
 });
 
 Route::filter('api.ua.required', function() {
-    if ( ! App::make('api')->getRequest()->validateUserAgent()) {
+    if ( ! App::make('api')->validateUserAgent()) {
         // 400 Bad Request - The request is malformed, such as if the body does not parse
         return Response::make('User-Agent is not defined', 400);
     }

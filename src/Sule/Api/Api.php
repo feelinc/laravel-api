@@ -8,13 +8,15 @@ namespace Sule\Api;
  * file that was distributed with this source code.
  */
 
-use Sule\Api\Facades\Request;
-use Sule\Api\Facades\Response;
+use Symfony\Component\HttpFoundation\Request;
+
 use Sule\Api\OAuth2\OAuthServer;
 use Sule\Api\OAuth2\Resource;
 use Sule\Api\OAuth2\Models\OauthClient;
 use Sule\Api\OAuth2\Repositories\FluentClient;
 use Sule\Api\OAuth2\Repositories\FluentSession;
+
+use Sule\Api\Facades\Response;
 
 use DateTime;
 
@@ -24,16 +26,53 @@ use League\OAuth2\Server\Exception\InvalidAccessTokenException;
 class Api
 {
 
+    /**
+     * The config.
+     *
+     * @var Array
+     */
     protected $config;
 
+    /**
+     * The Request.
+     *
+     * @var Request
+     */
     protected $request;
 
+    /**
+     * The Response.
+     *
+     * @var Response
+     */
+    protected $response;
+
+    /**
+     * The OAuthServer.
+     *
+     * @var OAuthServer
+     */
     protected $OAuth;
 
+    /**
+     * The Resource.
+     *
+     * @var Resource
+     */
     protected $resource;
 
+    /**
+     * The current client.
+     *
+     * @var OauthClient
+     */
     protected $client = null;
 
+    /**
+     * The current access token.
+     *
+     * @var string
+     */
     protected $accessToken = '';
 
     /**
@@ -65,16 +104,116 @@ class Api
      *
      * @param  array $config
      * @param  Request $request
+     * @param  Response $response
      * @param  OAuthServer $OAuth
      * @param  Resource $resource
      * @return void
      */
-    public function __construct(Array $config, Request $request, OAuthServer $OAuth, Resource $resource)
+    public function __construct(
+        Array $config, 
+        Request $request, 
+        Response $response, 
+        OAuthServer $OAuth, 
+        Resource $resource
+    )
     {
         $this->config   = $config;
         $this->request  = $request;
+        $this->response = $response;
         $this->OAuth    = $OAuth;
         $this->resource = $resource;
+    }
+
+    /**
+     * Return the configuration.
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getConfig($key)
+    {
+        if (empty($key)) {
+            return '';
+        }
+
+        $keys  = explode('.', $key);
+        $value = array();
+
+        if (isset($this->config[$keys[0]])) {
+            $value = $this->config[$keys[0]];
+        }
+
+        if (empty($value)) {
+            return $value;
+        }
+
+        $totalKey = count($keys);
+
+        if ($totalKey > 1) {
+            for ($i = 1; $i < $totalKey; ++$i) {
+                if (isset($value[$keys[$i]])) {
+                    $value = $value[$keys[$i]];
+                }
+            }
+        }
+
+        unset($keys);
+
+        return $value;
+    }
+
+    /**
+     * Return the request handler.
+     *
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Return the response handler.
+     *
+     * @return Response
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * Return the OAuth.
+     *
+     * @return Request
+     */
+    public function getOAuth()
+    {
+        return $this->OAuth;
+    }
+
+    /**
+     * Return the resource handler.
+     *
+     * @return Resource
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * Return the current client.
+     *
+     * @return OauthClient|null
+     */
+    public function getClient()
+    {
+        if (is_null($this->client)) {
+            $this->identifyClientFromRequest();
+        }
+
+        return $this->client;
     }
 
     /**
@@ -100,7 +239,7 @@ class Api
         $headers = array_merge($headers, $this->getRequestLimitHeader());
         $headers = array_merge($headers, $this->getConfig('headers'));
 
-        return Response::resourceJson($data, $status, $headers);
+        return $this->getResponse()->resourceJson($data, $status, $headers);
     }
 
     /**
@@ -116,7 +255,7 @@ class Api
         $headers = array_merge($headers, $this->getRequestLimitHeader());
         $headers = array_merge($headers, $this->getConfig('headers'));
 
-        return Response::collectionJson($data, $status, $headers);
+        return $this->getResponse()->collectionJson($data, $status, $headers);
     }
 
     /**
@@ -219,7 +358,7 @@ class Api
                 if ( ! $this->getResource()->hasScope($item)) {
                     return $this->resourceJson(array(
                         'message'     => 'forbidden',
-                        'description' => 'Only access token with scope '.$item.' can use this endpoint',
+                        'description' => 'Only access token with scope '.$item.' can be use in this endpoint',
                     ), 403);
                 }
             }
@@ -227,85 +366,15 @@ class Api
     }
 
     /**
-     * Return the configuration.
+     * Validate request user-agent.
      *
-     * @param string $key
-     * @return mixed
+     * @return boolean
      */
-    public function getConfig($key)
+    public function validateUserAgent()
     {
-        if (empty($key)) {
-            return '';
-        }
+        $userAgent = $this->getRequest()->header('USER_AGENT');
 
-        $keys  = explode('.', $key);
-        $value = array();
-
-        if (isset($this->config[$keys[0]])) {
-            $value = $this->config[$keys[0]];
-        }
-
-        if (empty($value)) {
-            return $value;
-        }
-
-        $totalKey = count($keys);
-
-        if ($totalKey > 1) {
-            for ($i = 1; $i < $totalKey; ++$i) {
-                if (isset($value[$keys[$i]])) {
-                    $value = $value[$keys[$i]];
-                }
-            }
-        }
-
-        unset($keys);
-
-        return $value;
-    }
-
-    /**
-     * Return the request handler.
-     *
-     * @return Request
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * Return the OAuth.
-     *
-     * @return Request
-     */
-    public function getOAuth()
-    {
-        return $this->OAuth;
-    }
-
-    /**
-     * Return the resource handler.
-     *
-     * @return Resource
-     */
-    public function getResource()
-    {
-        return $this->resource;
-    }
-
-    /**
-     * Return the current client.
-     *
-     * @return OauthClient|null
-     */
-    public function getClient()
-    {
-        if (is_null($this->client)) {
-            $this->identifyClientFromRequest();
-        }
-
-        return $this->client;
+        return ( ! empty($userAgent));
     }
 
     /**
@@ -315,14 +384,44 @@ class Api
      */
     public function isValidMD5()
     {
-        $client = $this->getClient();
-        $secret = '';
+        // Get client secret if available
+        $client       = $this->getClient();
+        $clientSecret = '';
         if ( ! is_null($client)) {
-            $secret = $client->secret;
+            $clientSecret = $client->secret;
         }
         unset($client);
 
-        return $this->getRequest()->validateMD5Data($secret);
+        // Get md5 data from header
+        $md5 = $this->getRequest()->header('CONTENT_MD5');
+        
+        // Do validation for JSON data
+        if ($this->getRequest()->isJson()) {
+            $content = $this->getRequest()->getContent();
+
+            if (empty($md5) and empty($content)) {
+                return true;
+            }
+
+            return (md5($content.$clientSecret) == $md5);
+        }
+
+        // Do validation for others than JSON data
+        $input = $this->getRequest()->all();
+
+        if ( ! empty($input)) {
+            foreach($input as $key => $item) {
+                if (str_contains($key, '/')) {
+                    unset($input[$key]);
+                }
+            }
+        }
+
+        if (empty($md5) and empty($input)) {
+            return true;
+        }
+
+        return (md5(http_build_query($input).$clientSecret) == $md5);
     }
 
     /**
@@ -447,6 +546,7 @@ class Api
             }
 
             unset($client);
+            unset($clientRepository);
         }
 
         unset($clientId);
