@@ -47,13 +47,17 @@ php artisan config:publish sule/api
 POST /authorization
 
 ### Request Headers
+```txt
 User-Agent: My User Agent 
 Content-MD5: md5($stringContent.$clientSecret) 
+```
 
 ### Request Body
+```txt
 grant_type:    client_credentials 
 client_id:     JXSb6nEzpQ0e3WAWjsSsZurCaLy0knDjzkwxRlJs 
 client_secret: C4vpZLRI2kncfXJQZ9l0hdnaTCTupyqF1deCVEPf 
+```
 
 ### Response Body
 ```json
