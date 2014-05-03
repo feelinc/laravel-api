@@ -47,20 +47,20 @@ php artisan config:publish sule/api
 POST /authorization
 
 ### Request Headers
-User-Agent: My User Agent
-Content-MD5: md5($stringContent.$clientSecret)
+User-Agent: My User Agent 
+Content-MD5: md5($stringContent.$clientSecret) 
 
 ### Request Body
-grant_type:    client_credentials
-client_id:     JXSb6nEzpQ0e3WAWjsSsZurCaLy0knDjzkwxRlJs
-client_secret: C4vpZLRI2kncfXJQZ9l0hdnaTCTupyqF1deCVEPf
+grant_type:    client_credentials 
+client_id:     JXSb6nEzpQ0e3WAWjsSsZurCaLy0knDjzkwxRlJs 
+client_secret: C4vpZLRI2kncfXJQZ9l0hdnaTCTupyqF1deCVEPf 
 
 ### Response Body
 ```json
 {
-    access_token: "jU5vKEBSPSVqRwEXwjIM0N1YefCG0hwqTK5i0UC3"
-    token_type: "bearer"
-    expires: 1399017374
-    expires_in: 3600
+    "access_token": "jU5vKEBSPSVqRwEXwjIM0N1YefCG0hwqTK5i0UC3",
+    "token_type": "bearer",
+    "expires": 1399017374,
+    "expires_in": 3600
 }
 ```
