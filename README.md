@@ -4,7 +4,7 @@ Laravel API
 Base library to start creating API using Laravel Framework. Plus support OAuth 2 authorization.
 
 ## Installation
-
+### 1. Composer
 Open your composer.json file and add the following lines:
 ```json
 {
@@ -24,4 +24,20 @@ Open your composer.json file and add the following lines:
     ]
     "minimum-stability": "stable"
 }
+```
+Run composer update from the command line
+```json
+composer update
+```
+
+### 2. Service Provider
+Add the following to the list of service providers in "app/config/app.php".
+```json
+'Sule\Api\ApiServiceProvider',
+```
+
+### 3. Configuration
+After installing, you can publish the package's configuration file into your application, by running the following command:
+```json
+php artisan config:publish sule/api
 ```
