@@ -86,10 +86,10 @@ Route::get('api/v1/users', array(
 ### 2. api.content.md5
 Check request content signature at "Content-MD5" header. Signature should be md5($stringContent.$clientSecret)
 ```php
-Route::get('api/v1/users', array(
+Route::post('api/v1/users', array(
     'before' => array(
         'api.content.md5', 
-        'api.oauth:read'
+        'api.oauth:write'
     ), function() {
 
     }
@@ -99,11 +99,11 @@ Route::get('api/v1/users', array(
 ### 3. api.ua.required
 Check request "User-Agent" header.
 ```php
-Route::get('api/v1/users', array(
+Route::post('api/v1/users', array(
     'before' => array(
         'api.ua.required', 
         'api.content.md5', 
-        'api.oauth:read'
+        'api.oauth:write'
     ), function() {
 
     }
@@ -113,12 +113,12 @@ Route::get('api/v1/users', array(
 ### 4. api.limit
 Check request not exceed the limit per each client.
 ```php
-Route::get('api/v1/users', array(
+Route::post('api/v1/users', array(
     'before' => array(
         'api.ua.required', 
         'api.content.md5', 
         'api.limit', 
-        'api.oauth:read'
+        'api.oauth:write'
     ), function() {
 
     }
