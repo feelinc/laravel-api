@@ -24,17 +24,21 @@ Open your composer.json file and add the following lines:
         }
     ]
     "minimum-stability": "stable"
-}
+}e
 ```
 Run composer update from the command line
 ```
 composer update
 ```
 
-### 2. Service Provider
+### 2. Service Provider & Aliases
 Add the following to the list of service providers in "app/config/app.php".
 ```
 'Sule\Api\ApiServiceProvider',
+```
+Add the following to the list of aliases in "app/config/app.php".
+```
+'API'             => 'Sule\Api\Facades\API'
 ```
 
 ### 3. Create Tables
@@ -42,7 +46,7 @@ Create all required tables from "TABLES.sql" file.
 
 ### 4. Configuration
 After installing, you can publish the package's configuration file into your application, by running the following command:
-```txt
+```
 php artisan config:publish sule/api
 ```
 
