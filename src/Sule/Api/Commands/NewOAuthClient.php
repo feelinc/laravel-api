@@ -51,7 +51,7 @@ class NewOAuthClient extends Command
 	public function fire()
 	{
 		$clientName   = $this->argument('name');
-		$clientId     = $this->option('id');
+		$clientId   = $this->option('id');
 		$clientSecret = $this->option('secret');
 
 		if (empty($clientId)) {
@@ -63,13 +63,13 @@ class NewOAuthClient extends Command
 		}
 
 		$oAuthClient = OauthClient::create(array(
-			'id'     => $clientId,
+			'id'   => $clientId,
 			'secret' => $clientSecret,
 			'name'   => $clientName
 		));
 
 		if ($oAuthClient->exists) {
-            $this->info('Client Name: '.$clientName);
+      $this->info('Client Name: '.$clientName);
 			$this->info('Client Id: '.$clientId);
 			$this->info('Client Secret: '.$clientSecret);
 			$this->info('Created');
@@ -80,20 +80,20 @@ class NewOAuthClient extends Command
 	}
 
 	/**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return array(
-            array(
-                'name', 
-                InputArgument::REQUIRED, 
-                'Client Name'
-            )
-        );
-    }
+   * Get the console command arguments.
+   *
+   * @return array
+   */
+  protected function getArguments()
+  {
+    return array(
+      array(
+        'name', 
+        InputArgument::REQUIRED, 
+        'Client Name'
+      )
+    );
+  }
 
 	/**
 	 * Get the console command options.
@@ -103,21 +103,21 @@ class NewOAuthClient extends Command
 	protected function getOptions()
 	{
 		return array(
-            array(
-                'id', 
-                null, 
-                InputOption::VALUE_OPTIONAL, 
-                'Client Id', 
-                ''
-            ),
-            array(
-                'secret', 
-                null, 
-                InputOption::VALUE_OPTIONAL, 
-                'Client Secret', 
-                ''
-            )
-        );
+      array(
+        'id', 
+        null, 
+        InputOption::VALUE_OPTIONAL, 
+        'Client Id', 
+        ''
+      ),
+      array(
+        'secret', 
+        null, 
+        InputOption::VALUE_OPTIONAL, 
+        'Client Secret', 
+        ''
+      )
+    );
 	}
 
 }

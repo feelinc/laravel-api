@@ -10,5 +10,5 @@ namespace Sule\Api\OAuth2\Repositories;
 
 interface SessionManagementInterface
 {
-    public function deleteExpired();
+  public function deleteExpired();
 }

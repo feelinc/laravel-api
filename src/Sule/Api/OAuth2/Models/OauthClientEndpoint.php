@@ -23,51 +23,51 @@ class OauthClientEndpoint extends Model implements OauthClientEndpointInterface
 	protected $table = 'oauth_client_endpoints';
 
 	/**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = array();
+   * The attributes that aren't mass assignable.
+   *
+   * @var array
+   */
+  protected $guarded = array();
 
-    /**
-     * Returns the OAuth client endpoint's table name.
-     *
-     * @return string
-     */
-    public function getTable()
-    {
-        return $this->table;
-    }
+  /**
+   * Returns the OAuth client endpoint's table name.
+   *
+   * @return string
+   */
+  public function getTable()
+  {
+    return $this->table;
+  }
 
-    /**
-     * Returns the OAuth client endpoint's ID.
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->getKey();
-    }
+  /**
+   * Returns the OAuth client endpoint's ID.
+   *
+   * @return mixed
+   */
+  public function getId()
+  {
+    return $this->getKey();
+  }
 
-    /**
-     * Saves the OAuth client endpoint.
-     *
-     * @param  array  $options
-     * @return bool
-     */
-    public function save(array $options = array())
-    {
-        return parent::save();
-    }
+  /**
+   * Saves the OAuth client endpoint.
+   *
+   * @param  array  $options
+   * @return bool
+   */
+  public function save(array $options = array())
+  {
+    return parent::save();
+  }
 
-    /**
-     * Delete the OAuth client endpoint.
-     *
-     * @return bool
-     */
-    public function delete()
-    {
-        return parent::delete();
-    }
+  /**
+   * Delete the OAuth client endpoint.
+   *
+   * @return bool
+   */
+  public function delete()
+  {
+    return parent::delete();
+  }
 
 }

@@ -1,31 +1,32 @@
 {
-    "name": "sule/api",
-    "description": "Helper to create APIs in Laravel.",
-    "authors": [
-        {
-            "name": "Sulaeman",
-            "email": "me@sulaeman.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.3.7",
-        "league/oauth2-server": "2.1.x"
+  "name": "sule/api",
+  "description": "Helper to create APIs in Laravel.",
+  "authors": [
+    {
+      "name": "Sulaeman",
+      "email": "me@sulaeman.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.7",
+    "league/oauth2-server": "4.0.x"
+  },
+  "autoload": {
+    "psr-0": {
+      "Sule\\Api": "src/"
+    }
+  },
+  "extra": {
+    "component": "package",
+    "frameworks": ["Laravel 4"],
+    "versions": {
+      "1": "1.0/master",
+      "2": "2.0/master",
+      "3": "3.0/master"
     },
-    "autoload": {
-        "psr-0": {
-            "Sule\\Api": "src/"
-        }
-    },
-    "extra": {
-        "component": "package",
-        "frameworks": ["Laravel 4"],
-        "versions": {
-            "1": "1.0/master",
-            "2": "master"
-        },
-        "branch-alias": {
-            "dev-master": "2.0-dev"
-        }
-    },
-    "minimum-stability": "dev"
+    "branch-alias": {
+      "dev-master": "3.0/master"
+    }
+  },
+  "minimum-stability": "stable"
 }

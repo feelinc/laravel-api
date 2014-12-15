@@ -54,7 +54,7 @@ class NewOAuthScope extends Command
 		$name        = $this->argument('name');
 		$description = $this->option('description');
 
-        if (empty($name)) {
+    if (empty($name)) {
 			$name = $scope;
 		}
 
@@ -65,7 +65,7 @@ class NewOAuthScope extends Command
 		));
 
 		if ($oAuthScope->exists) {
-            $this->info('Scope: '.$scope);
+      $this->info('Scope: '.$scope);
 			$this->info('Created');
 		} else {
 			$this->info('Scope: '.$scope);
@@ -74,25 +74,25 @@ class NewOAuthScope extends Command
 	}
 
 	/**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return array(
-            array(
-                'scope', 
-                InputArgument::REQUIRED, 
-                'Scope'
-            ),
-            array(
-                'name', 
-                InputArgument::OPTIONAL, 
-                'Scope name'
-            )
-        );
-    }
+   * Get the console command arguments.
+   *
+   * @return array
+   */
+  protected function getArguments()
+  {
+    return array(
+      array(
+        'scope', 
+        InputArgument::REQUIRED, 
+        'Scope'
+      ),
+      array(
+        'name', 
+        InputArgument::OPTIONAL, 
+        'Scope name'
+      )
+    );
+  }
 
 	/**
 	 * Get the console command options.
@@ -102,14 +102,14 @@ class NewOAuthScope extends Command
 	protected function getOptions()
 	{
 		return array(
-            array(
-                'description', 
-                null, 
-                InputOption::VALUE_OPTIONAL, 
-                'Scope description', 
-                ''
-            )
-        );
+      array(
+        'description', 
+        null, 
+        InputOption::VALUE_OPTIONAL, 
+        'Scope description', 
+        ''
+      )
+    );
 	}
 
 }
