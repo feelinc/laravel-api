@@ -93,4 +93,5 @@ class OAuthServer
   {
     return $this->authServer->getGrantType('authorization_code')->newAuthoriseRequest($owner, $owner_id, $options);
   }
+
 }

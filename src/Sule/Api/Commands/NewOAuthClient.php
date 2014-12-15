@@ -51,7 +51,7 @@ class NewOAuthClient extends Command
 	public function fire()
 	{
 		$clientName   = $this->argument('name');
-		$clientId   = $this->option('id');
+		$clientId     = $this->option('id');
 		$clientSecret = $this->option('secret');
 
 		if (empty($clientId)) {
@@ -63,7 +63,7 @@ class NewOAuthClient extends Command
 		}
 
 		$oAuthClient = OauthClient::create(array(
-			'id'   => $clientId,
+			'id'     => $clientId,
 			'secret' => $clientSecret,
 			'name'   => $clientName
 		));
