@@ -143,8 +143,4 @@ return API::resourceJson($data = array(), $status = 200, array $headers = array(
 ### 2. Collection JSON object
 ```php
 return API::collectionJson($data = array(), $status = 200, array $headers = array());
-<<<<<<< HEAD
 ```
-=======
-```
->>>>>>> 870952ee77d830b51754e846862196e912509fb3
