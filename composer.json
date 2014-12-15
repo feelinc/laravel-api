@@ -21,11 +21,12 @@
     "frameworks": ["Laravel 4"],
     "versions": {
       "1": "1.0/master",
-      "2": "master"
+      "2": "2.0/master",
+      "3": "master"
     },
     "branch-alias": {
-      "dev-master": "2.0-dev"
+      "dev-master": "3.0-dev"
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }
